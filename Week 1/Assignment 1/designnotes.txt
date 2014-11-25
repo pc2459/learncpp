@@ -1,0 +1,161 @@
+Name: 			Po Linn Chia
+Date: 			2014-07-10
+Assignment: 	Lab 3 (Assignment 1 Design)
+Instruction: 	I. Fleming
+
+==========================================================================
+ASSIGNMENT 1 INITIAL DESIGN
+==========================================================================
+** May change during actual implementation
+
+|| OVERVIEW
+
+I will create a Craigslist class that stores the array and has all the 
+necessary functions of the messageboard. Posts will be stored as structs. 
+A sales docket text file will store all records of sales. The outline for 
+the item struc, Craiglists class, and main program are listed below.
+
+Posts will be stored in 2 arrays: Buy (wanted) and Sell (for sale). The 
+arrays will be sorted by type. 
+
+The matching algorithm will use a binary search on the appropriate array.
+
+The USER will have the option at every turn to: 
+	Read next post OR all remaining posts
+	Print all current posts
+	Print all completed sales
+
+The array will be set to max size 100, as per what was said during 
+Lecture. 
+
+The following count as operations:
+
+		Read from file 			1
+		Close file 				1
+		Add item to array 		1
+		Remove from array 		1
+		Shift array up 			n
+		Steps taken to match 	n
+		Print status			n
+
+
+|| OUTLINE
+
+|||| OBJECTS
+
+1 Struct item
+	type	string
+	price	double
+	status	bool 1 = for sale/ 0 = wanted
+
+|||| CLASS CRAIGSLIST
+
+Class craigslist
+
+	array[100] 		struct objects for sale
+	arry[100]		struct objects wanted
+	ifstream		messageboard.txt
+	ofstream		salesdocket.text
+	int 			number of posts in sell array
+	int 			number of posts in buy array
+	int 			operations counter
+	int 			number of sales
+	int 			number of lines in input file
+	int 			number of lines read from input file
+
+|||| CLASS FUNCTIONS
+
+1 Print status
+	
+Iterate through and print contents of each array
+	for sale
+		----
+	wanted
+		----
+
+2 Read next post from input file 	void(ifstream input)
+
+	Open file
+		Increment counter	
+	If file empty
+		Return error message
+	Else
+		For each line
+			Read line into struct
+			Run matching algorithm
+				If Sell
+					Check buy list
+					Binary search for same type
+						If True
+							Check that Buy Price >= Sell Price
+								If True
+									Append listing to docket
+									Remove Buy post
+									Reorder Buy list
+								If False
+									Append struct to Sell array
+									Sort Sell array
+						If False
+							Append struct to Sell array
+							Sort Sell array
+				If Buy
+					Check Sell list
+					Binary search for same type
+						If True
+							Check that Sell price <= Buy price
+								If True
+									Append Sell listing to docket 
+									(we want the price sold at)
+									Remove Sell post
+									Reorder Sell list
+								If False
+									Append struct to Buy array
+									Sort Buy array
+						If False
+							Append struct to Buy array
+							Sort Buy array
+		Increment counter for each step in this search
+	Close file
+		Increment counter
+
+3 Write sale to docket  void(struct post)
+
+	Open sales docket 
+		Increment counter
+	Write to docket
+		Go to end of file
+		Write new line
+		Increment counter
+	Close docket
+		Increment counter
+
+4 Remove post 	void(struct posts[])
+	Remove post from array
+	Close gap
+
+5 Sort array 	void(struct posts[])
+	Sort array 
+	(Bubble: http://mathbits.com/MathBits/CompSci/Arrays/Bubble.htm)
+
+|||| MAIN
+
+	Create messageboard
+	Create sales docket
+	Start reading items
+		While there are lines left in the input file
+			Read next object?
+			Real all remaining objects?
+			Print remaining messages?
+			Print completed sales?
+	Terminate
+
+
+Sources:
+
+* Input/output http://www.cplusplus.com/doc/tutorial/files/
+* Reading in comma separate values http://www.daniweb.com/software-development/cpp/threads/196219/help-reading-a-text-file-separated-by-commas-into-different-arrays
+* Counting lines in file http://stackoverflow.com/questions/3482064/counting-the-number-of-lines-in-a-text-file
+* Jump to Nth line of file http://stackoverflow.com/questions/7273326/getting-the-nth-line-of-a-text-file-in-c
+* Compare strings http://www.cplusplus.com/reference/string/string/compare/
+* Add to array
+
